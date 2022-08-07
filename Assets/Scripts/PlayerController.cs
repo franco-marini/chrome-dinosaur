@@ -4,31 +4,27 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-  [SerializeField] private float jumpHeight = 5f;
+  [SerializeField] private float jumpHeight = 7f;
   private static bool isJumping = false;
-  private Rigidbody2D rigidbody2d;
-
-  // Start is called before the first frame update
-  void Start()
-  {
-
-  }
+  private GameObject player;
+  private Rigidbody2D playerBody;
 
   private void Awake()
   {
-    rigidbody2d = transform.GetComponent<Rigidbody2D>();
-  }
-
-  // Update is called once per frame
-  void Update()
-  {
-    Debug.Log("isJumping" + isJumping.ToString());
-    if (Input.GetKeyDown(KeyCode.Space) && isJumping == false)
+    player = GameObject.FindGameObjectWithTag("player");
+    if (player != null)
     {
-      rigidbody2d.velocity = Vector2.up * jumpHeight;
+      playerBody = player.GetComponent<Rigidbody2D>();
     }
   }
 
+  void Update()
+  {
+    if (Input.GetKeyDown(KeyCode.Space) && isJumping == false)
+    {
+      playerBody.velocity = Vector2.up * jumpHeight;
+    }
+  }
 
   private void OnCollisionEnter2D(Collision2D collision)
   {
