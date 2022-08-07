@@ -1,24 +1,27 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
   [SerializeField] private float moveForce = 2f;
-  private GameObject enemy;
   private Rigidbody2D enemyBody;
 
-  private void Awake()
+  private void Start()
   {
-    enemy = GameObject.FindWithTag("enemy");
-    if (enemy != null)
-    {
-      enemyBody = enemy.GetComponent<Rigidbody2D>();
-    }
+    enemyBody = GetComponent<Rigidbody2D>();
   }
 
-  void Update()
+  private void Update()
+  {
+    MoveToLeft();
+  }
+
+  private void MoveToLeft()
   {
     enemyBody.velocity = Vector2.left * moveForce;
+  }
+
+  private void Destroy()
+  {
+    Object.Destroy(enemyBody);
   }
 }
