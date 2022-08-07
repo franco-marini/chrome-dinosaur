@@ -3,6 +3,7 @@ using UnityEngine;
 public class EnemySpawnerController : MonoBehaviour
 {
   [SerializeField] private GameObject enemy;
+  [SerializeField] private float repeatTime = 3f;
 
   public static EnemySpawnerController Instance { get; private set; }
   private GameObject newEnemy;
@@ -24,7 +25,7 @@ public class EnemySpawnerController : MonoBehaviour
   private void Start()
   {
     this.spawnPoint = transform.position;
-    InvokeRepeating("SpawnNewEnemy", 0f, 2f);
+    InvokeRepeating("SpawnNewEnemy", 0f, repeatTime);
   }
 
   private void SpawnNewEnemy()

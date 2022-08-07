@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -37,6 +35,7 @@ public class PlayerController : MonoBehaviour
     if (collision.collider.tag == enemyTag)
     {
       GameManager.Instance.ResetScene();
+      Debug.Log("The scene was reset");
     }
   }
 

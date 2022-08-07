@@ -4,6 +4,7 @@ public class EnemyController : MonoBehaviour
 {
   [SerializeField] private float moveForce = 2f;
   private Rigidbody2D enemyBody;
+  private string destroyZoneTag = "destroyZone";
 
   private void Start()
   {
@@ -20,8 +21,12 @@ public class EnemyController : MonoBehaviour
     enemyBody.velocity = Vector2.left * moveForce;
   }
 
-  private void Destroy()
+  private void OnCollisionEnter2D(Collision2D collision)
   {
-    Object.Destroy(enemyBody);
+    if (collision.collider.tag == destroyZoneTag)
+    {
+      Destroy(this.gameObject);
+      Debug.Log("Enemy destroyed");
+    }
   }
 }
