@@ -4,7 +4,7 @@ public class EnemyController : MonoBehaviour
 {
   [SerializeField] private float moveForce = 2f;
   private Rigidbody2D enemyBody;
-  private string destroyZoneTag = "destroyZone";
+  private const string destroyZoneTag = "destroyZone";
 
   private void Start()
   {

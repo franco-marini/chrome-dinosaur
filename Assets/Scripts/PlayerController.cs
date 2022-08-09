@@ -6,8 +6,8 @@ public class PlayerController : MonoBehaviour
   private static bool isJumping = false;
   private GameObject player;
   private Rigidbody2D playerBody;
-  private string enemyTag = "enemy";
-  private string floorTag = "floor";
+  private const string enemyTag = "enemy";
+  private const string floorTag = "floor";
 
   private void Awake()
   {

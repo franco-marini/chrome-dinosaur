@@ -48,9 +48,9 @@ public class SpawnManager : MonoBehaviour
     float spawnerPivot = spawnerHeight / 2;
     for (int i = 0; i < spacesInsideManager; i++)
     {
-      float spawnPositionY = positionTopY - spawnerPivot - spawnerHeight * i;
       if (i % 2 == 0)
       {
+        float spawnPositionY = positionTopY - spawnerPivot - spawnerHeight * i;
         Vector2 spawnPosition = new Vector2(managerPosition.x, spawnPositionY);
         Instantiate(spawner, spawnPosition, Quaternion.identity, transform);
       }
