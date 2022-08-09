@@ -6,7 +6,7 @@ public class SpawnManager : MonoBehaviour
   [SerializeField] private GameObject spawner;
   [SerializeField] float initialSpawnTime = 1f;
   [SerializeField] float intervalSpawnTime = 3f;
-  private GameObject[] enemySpawners;
+  private SpawnerController[] spawners;
   private Vector2 managerPosition;
   private RectTransform managerTransform;
   public static SpawnManager Instance { get; private set; }
@@ -27,35 +27,33 @@ public class SpawnManager : MonoBehaviour
   private void Start()
   {
     CreateSpawners();
+    spawners = GetComponentsInChildren<SpawnerController>();
     InvokeRepeating("OrderSpawn", initialSpawnTime, intervalSpawnTime);
   }
 
   private void OrderSpawn()
   {
-    int randomIndex = Random.Range(0, enemySpawners.Length);
-    EnemySpawnerController enemySpawner = enemySpawners[randomIndex].GetComponent<EnemySpawnerController>();
-    enemySpawner.SpawnEnemy();
+    int randomIndex = Random.Range(0, spawners.Length);
+    spawners[randomIndex].SpawnEnemy();
   }
 
   private void CreateSpawners()
   {
-    enemySpawners = new GameObject[spawnersAmount];
     managerPosition = transform.position;
     Vector2 managerScale = transform.localScale;
-    // Review the formula
-    float positionTopY = managerScale.y - (managerScale.y + managerPosition.y) - managerPosition.y;
-    float spawnPositionY = managerPosition.y / spawnersAmount;
-    float spawnScaleY = managerScale.y / spawnersAmount;
-    for (int i = 0; i < spawnersAmount; i++)
+    float managerPivot = managerScale.y / 2;
+    float positionTopY = managerScale.y - ((managerPivot) - (managerPosition.y));
+    int spacesInsideManager = spawnersAmount * 2 - 1;
+    float spawnerHeight = managerScale.y / spacesInsideManager;
+    float spawnerPivot = spawnerHeight / 2;
+    for (int i = 0; i < spacesInsideManager; i++)
     {
-      Vector2 spawnPosition = managerPosition;
-      float spawnerScaleY = spawner.transform.localScale.y;
-      float spawnerPivotY = spawnerScaleY / 2;
-      //   Debug.Log("position top: " + positionTopY);
-      //   Debug.Log("spawner position Y: " + (spawnerPivotY + spawnerScaleY * i * 2));
-      spawnPosition.y = positionTopY - (spawnerPivotY + spawnerScaleY * i * 2);
-      //   Debug.Log("spawner position Y: ");
-      enemySpawners[i] = Instantiate(spawner, spawnPosition, Quaternion.identity, transform);
+      float spawnPositionY = positionTopY - spawnerPivot - spawnerHeight * i;
+      if (i % 2 == 0)
+      {
+        Vector2 spawnPosition = new Vector2(managerPosition.x, spawnPositionY);
+        Instantiate(spawner, spawnPosition, Quaternion.identity, transform);
+      }
     }
   }
 }

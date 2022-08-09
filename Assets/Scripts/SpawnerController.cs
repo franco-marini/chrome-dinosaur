@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemySpawnerController : MonoBehaviour
+public class SpawnerController : MonoBehaviour
 {
   [SerializeField] private GameObject enemy;
 
