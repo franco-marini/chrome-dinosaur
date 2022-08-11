@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-  [SerializeField] private float moveForce = 2f;
+  [SerializeField] public float moveForce = 2f;
   private Rigidbody2D enemyBody;
   private const string destroyZoneTag = "destroyZone";
 
   private void Start()
   {
     enemyBody = GetComponent<Rigidbody2D>();
+    gameObject.SetActive(false);
   }
 
   private void Update()
@@ -25,8 +26,8 @@ public class EnemyController : MonoBehaviour
   {
     if (collision.collider.tag == destroyZoneTag)
     {
-      Destroy(this.gameObject);
-      Debug.Log("Enemy destroyed");
+      SpawnManager.Instance.AddEnemyToList(this.gameObject);
+      gameObject.SetActive(false);
     }
   }
 }
