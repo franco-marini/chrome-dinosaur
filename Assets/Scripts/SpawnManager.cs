@@ -5,10 +5,9 @@ public class SpawnManager : MonoBehaviour
 {
   [SerializeField] int spawnersAmount = 2;
   [SerializeField] int enemiesAmount = 10;
-  [SerializeField] GameObject spawner;
-  [SerializeField] GameObject enemy;
   [SerializeField] float initialSpawnTime = 1f;
   [SerializeField] float intervalSpawnTime = 3f;
+  GameObject spawnerPrefab, enemyPrefab;
   private SpawnerController[] spawners;
   private List<GameObject> enemiesQueue;
   private Vector2 managerPosition;
@@ -30,6 +29,8 @@ public class SpawnManager : MonoBehaviour
 
   private void Start()
   {
+    spawnerPrefab = Resources.Load<GameObject>("Prefabs/Spawner");
+    enemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy");
     CreateEnemies();
     CreateSpawners();
     spawners = GetComponentsInChildren<SpawnerController>();
@@ -70,7 +71,7 @@ public class SpawnManager : MonoBehaviour
       {
         float spawnPositionY = GetFloatWith2Decimal(positionTopY - spawnerPivot - spawnerHeight * i);
         Vector2 spawnPosition = new Vector2(managerPosition.x, spawnPositionY);
-        Instantiate(spawner, spawnPosition, Quaternion.identity, transform);
+        Instantiate(spawnerPrefab, spawnPosition, Quaternion.identity, transform);
       }
     }
   }
@@ -80,7 +81,7 @@ public class SpawnManager : MonoBehaviour
     enemiesQueue = new List<GameObject>();
     for (int i = 0; i < enemiesAmount; i++)
     {
-      GameObject newEnemy = Instantiate(enemy, transform.position, Quaternion.identity);
+      GameObject newEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
       enemiesQueue.Add(newEnemy);
     }
   }
