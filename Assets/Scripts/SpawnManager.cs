@@ -7,11 +7,8 @@ public class SpawnManager : MonoBehaviour
   [SerializeField] int enemiesAmount = 10;
   [SerializeField] float initialSpawnTime = 1f;
   [SerializeField] float intervalSpawnTime = 3f;
-  private GameObject spawnerPrefab, enemyPrefab;
   private SpawnerController[] spawners;
   private Queue<GameObject> enemiesQueue;
-  private Vector2 managerPosition;
-  private RectTransform managerTransform;
   public static SpawnManager Instance { get; private set; }
 
   private void Awake()
@@ -31,11 +28,8 @@ public class SpawnManager : MonoBehaviour
   {
     // TO-DO: Check if could show a develop warning
     ValidateInitialValues();
-    spawnerPrefab = Utils.GetPrefabResource("Spawner");
-    enemyPrefab = Utils.GetPrefabResource("Enemy");
     CreateEnemies();
     CreateSpawners();
-    spawners = GetComponentsInChildren<SpawnerController>();
     InvokeRepeating("OrderSpawn", initialSpawnTime, intervalSpawnTime);
   }
 
@@ -48,7 +42,8 @@ public class SpawnManager : MonoBehaviour
 
   private void CreateSpawners()
   {
-    managerPosition = transform.position;
+    GameObject spawnerPrefab = Utils.GetPrefabResource("Spawner");
+    Vector2 managerPosition = transform.position;
     Vector2 managerScale = transform.localScale;
     float managerPivot = Utils.GetFloatWith2Decimal(managerScale.y / 2);
     float positionTopY = Utils.GetFloatWith2Decimal(managerScale.y - ((managerPivot) - (managerPosition.y)));
@@ -64,10 +59,12 @@ public class SpawnManager : MonoBehaviour
         Instantiate(spawnerPrefab, spawnPosition, Quaternion.identity, transform);
       }
     }
+    spawners = GetComponentsInChildren<SpawnerController>();
   }
 
   private void CreateEnemies()
   {
+    GameObject enemyPrefab = Utils.GetPrefabResource("Enemy");
     enemiesQueue = new Queue<GameObject>();
     for (int i = 0; i < enemiesAmount; i++)
     {
