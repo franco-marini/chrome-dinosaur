@@ -8,7 +8,7 @@ TagManager:
   - floor
   - player
   - gameManager
-  - destroyZone
+  - deactivateZone
   layers:
   - Default
   - TransparentFX

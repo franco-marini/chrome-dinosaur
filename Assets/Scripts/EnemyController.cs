@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-  [SerializeField] public float moveForce = 2f;
+  [SerializeField] private float moveForce = 2f;
   private Rigidbody2D enemyBody;
-  private const string destroyZoneTag = "destroyZone";
+  private const string deactivateZoneTag = "deactivateZone";
 
   private void Start()
   {
@@ -24,7 +24,7 @@ public class EnemyController : MonoBehaviour
 
   private void OnCollisionEnter2D(Collision2D collision)
   {
-    if (collision.collider.tag == destroyZoneTag)
+    if (collision.collider.tag == deactivateZoneTag)
     {
       SpawnManager.Instance.AddEnemyToList(this.gameObject);
       gameObject.SetActive(false);

@@ -7,9 +7,9 @@ public class SpawnManager : MonoBehaviour
   [SerializeField] int enemiesAmount = 10;
   [SerializeField] float initialSpawnTime = 1f;
   [SerializeField] float intervalSpawnTime = 3f;
-  GameObject spawnerPrefab, enemyPrefab;
+  private GameObject spawnerPrefab, enemyPrefab;
   private SpawnerController[] spawners;
-  private List<GameObject> enemiesQueue;
+  private Queue<GameObject> enemiesQueue;
   private Vector2 managerPosition;
   private RectTransform managerTransform;
   public static SpawnManager Instance { get; private set; }
@@ -29,8 +29,10 @@ public class SpawnManager : MonoBehaviour
 
   private void Start()
   {
-    spawnerPrefab = Resources.Load<GameObject>("Prefabs/Spawner");
-    enemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy");
+    // TO-DO: Check if could show a develop warning
+    ValidateInitialValues();
+    spawnerPrefab = Utils.GetPrefabResource("Spawner");
+    enemyPrefab = Utils.GetPrefabResource("Enemy");
     CreateEnemies();
     CreateSpawners();
     spawners = GetComponentsInChildren<SpawnerController>();
@@ -40,36 +42,24 @@ public class SpawnManager : MonoBehaviour
   private void OrderSpawn()
   {
     int randomIndex = Random.Range(0, spawners.Length);
-    GameObject firstEnemy = enemiesQueue[0];
-    enemiesQueue.RemoveAt(0);
+    GameObject firstEnemy = enemiesQueue.Dequeue();
     spawners[randomIndex].SpawnEnemy(firstEnemy);
   }
-
-  private float GetFloatWith1Decimal(float value)
-  {
-    return Mathf.Round(value * 10.0f) * 0.1f;
-  }
-
-  private float GetFloatWith2Decimal(float value)
-  {
-    return Mathf.Round(value * 100f) / 100f;
-  }
-
 
   private void CreateSpawners()
   {
     managerPosition = transform.position;
     Vector2 managerScale = transform.localScale;
-    float managerPivot = GetFloatWith2Decimal(managerScale.y / 2);
-    float positionTopY = GetFloatWith2Decimal(managerScale.y - ((managerPivot) - (managerPosition.y)));
+    float managerPivot = Utils.GetFloatWith2Decimal(managerScale.y / 2);
+    float positionTopY = Utils.GetFloatWith2Decimal(managerScale.y - ((managerPivot) - (managerPosition.y)));
     int spacesInsideManager = spawnersAmount * 2 - 1;
-    float spawnerHeight = GetFloatWith1Decimal(managerScale.y / spacesInsideManager);
-    float spawnerPivot = GetFloatWith2Decimal(spawnerHeight / 2);
+    float spawnerHeight = Utils.GetFloatWith1Decimal(managerScale.y / spacesInsideManager);
+    float spawnerPivot = Utils.GetFloatWith2Decimal(spawnerHeight / 2);
     for (int i = 0; i < spacesInsideManager; i++)
     {
       if (i % 2 == 0)
       {
-        float spawnPositionY = GetFloatWith2Decimal(positionTopY - spawnerPivot - spawnerHeight * i);
+        float spawnPositionY = Utils.GetFloatWith2Decimal(positionTopY - spawnerPivot - spawnerHeight * i);
         Vector2 spawnPosition = new Vector2(managerPosition.x, spawnPositionY);
         Instantiate(spawnerPrefab, spawnPosition, Quaternion.identity, transform);
       }
@@ -78,16 +68,36 @@ public class SpawnManager : MonoBehaviour
 
   private void CreateEnemies()
   {
-    enemiesQueue = new List<GameObject>();
+    enemiesQueue = new Queue<GameObject>();
     for (int i = 0; i < enemiesAmount; i++)
     {
       GameObject newEnemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
-      enemiesQueue.Add(newEnemy);
+      enemiesQueue.Enqueue(newEnemy);
+    }
+  }
+
+  private void ValidateInitialValues()
+  {
+    if (spawnersAmount <= 0)
+    {
+      spawnersAmount = 1;
+    }
+    if (enemiesAmount <= 2)
+    {
+      enemiesAmount = 3;
+    }
+    if (initialSpawnTime <= 0)
+    {
+      initialSpawnTime = 1f;
+    }
+    if (intervalSpawnTime <= 0)
+    {
+      intervalSpawnTime = 3f;
     }
   }
 
   public void AddEnemyToList(GameObject enemyGo)
   {
-    enemiesQueue.Add(enemyGo);
+    enemiesQueue.Enqueue(enemyGo);
   }
 }

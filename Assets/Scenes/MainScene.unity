@@ -521,8 +521,8 @@ GameObject:
   - component: {fileID: 1555189410}
   - component: {fileID: 1555189412}
   m_Layer: 0
-  m_Name: DestroyZone
-  m_TagString: destroyZone
+  m_Name: DeactivateZone
+  m_TagString: deactivateZone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -719,7 +719,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnersAmount: 2
   enemiesAmount: 10
-  spawner: {fileID: 8645427007696663290, guid: fa901e50969cb4024808a04c7a54c3c3, type: 3}
-  enemy: {fileID: 2380089358858064316, guid: e5f17119930c04d7185f7ae6647509b2, type: 3}
   initialSpawnTime: 1
   intervalSpawnTime: 3
